@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>focusable tabindex style | htmllint</title>
+</head>
+
+<body>
+  <form id="passing-test">
+    <input tabindex="0"></input>
+    <input tabindex="-1"></input>
+    <input></input>
+  </form>
+
+  <form id="failing-test">
+    <input tabindex="2"></input>
+    <input tabindex="-1"></input>
+    <input></input>'
+    <input tabindex="-3"></input>
+  </form>
+</body>
+
+</html>
