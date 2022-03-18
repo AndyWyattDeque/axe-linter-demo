@@ -10,7 +10,7 @@ echo ""
 echo "Axe Linter Starting $(date)"
  
 # Setup variables for Axe Linter Server
-export AXE_LINTER_SERVER_URL=http://axe-linter-s.dequecloud.com
+export AXE_LINTER_SERVER_URL=http://jenkins-sonar-linter-demo.dequecloud.com
 export AXE_LINTER_SERVER_PORT=3000
 StatusCode=0
 TempCode=0 
