@@ -44,7 +44,7 @@ shopt -s nocasematch;
               echo "** Axe Linter Accessibility Issues Detected: $i"
               TempCode=1
            else
-             echo "- No Axe Linter Connector Issues Detected in: $i"
+             echo "- $i is Axe Clean"
         fi
            if (($TempCode !=0))
            then
