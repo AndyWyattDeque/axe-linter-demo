@@ -5,6 +5,7 @@
 # This script requires that the pre-commit hooks directory be set to .githooks
 # git config --list to display the core.hooksPath variable
 # git config core.hooksPath .githooks
+# make sure to set 755 permissions on the pre-commit hook and on the axe-linter-connector.
 # Execute the axe-linter-connector. The output file will be reviewed and call back with exit codes:
 
 ## 0 - No Accessibility Defects
