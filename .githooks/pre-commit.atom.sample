@@ -2,7 +2,11 @@
 # axe-linter pre-commit
 # axe-linter-connector-win, -linux, -mac need to be installed and in path. Update line 32 with name of connector. 
 # This script will setup the environment variables needed for the axe-linter-connector
-# and execute the axe-linter-connector. The output file will be reviewed and call back with exit codes:
+# This script requires that the pre-commit hooks directory be set to .githooks
+# git config --list to display the core.hooksPath variable
+# git config core.hooksPath .githooks
+# make sure to set 755 permissions on the pre-commit hook and on the axe-linter-connector.
+# The output file will be reviewed and call back with exit codes:
 ## 0 - No Accessibility Defects
 ## 1 - Axe Linter Detected Accessibility Defects
 ## 2 - Execution problem, or Axe-Linter Server unavailable.
