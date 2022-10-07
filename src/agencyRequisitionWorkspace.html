@@ -1,0 +1,90 @@
+<section class="requisitionWorkspace" ng-controller="agencyRequisitionWorkspaceController" id="requisitionagencyWorkspacePanel" label-id="agencyRequisitionHeader" force-focus="true">
+  <div class="layout-container">
+    <div ng-if="filter.showCandidateListFilter">
+      <div class="aside left leftnav am-slide-left" tabindex="-1" role="dialog" ng-class="filter.showCandidateListFilter ? 'auto-left':''">
+        <div class="aside-dialog">
+          <div class="aside-content">
+            <div class="aside-body filterPanel">
+              <div id="candidateList">
+                <span id="idInterviewFilterClose" class="fa fa-times fa-lg pull-right margin-top-10PX marginRight-10PX" ng-click="filter.showCandidateListFilter = !filter.showCandidateListFilter" role="button" translate-attr-aria-label="COMMON_CLOSETEXT" translate></span>
+                <div bs-tabs id="candidateWorkspaceTabs">
+                  <div bs-pane="" data-title="{{'CF_FILTER' | translate}}" name="filter">
+                    <div class="tabContent">
+                      <div class="knockOutRadioButton">
+                        <h4 translate="REQUISTION_CANDIDATE_KNOCKOUT"></h4>
+                        <div class="row checkboxDivPadding">
+                          <input id="knockedOut" type="checkbox" ng-model="filter.showKnockOut" ng-change="filter.setKnockOutFilter('showKnockOut', filter.showKnockOut)" /><label for="knockedOut" class="labelLeftPadding" translate="BUTTON_YES"></label>
+                        </div>
+                        <div class="row checkboxDivPadding">
+                          <input id="notKnockedOut" type="checkbox" ng-model="filter.hideKnockOut" ng-change="filter.setKnockOutFilter('hideKnockOut', filter.hideKnockOut)" /><label for="notKnockedOut" class="labelLeftPadding" translate="BUTTON_NO"></label>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 translate="REQUISITION_APPLICATION_STATUS"></h4>
+                        <div ng-repeat="status in filter.applicationStatus track by $index">
+                          <div class="row checkboxDivPadding">
+                            <input id="{{$index + 'status'}}" type="checkbox" ng-model="status.checked" ng-change="filter.createFilter(status.itemCode, status.checked, filter.sourceFilterList);" /><label for="{{$index + 'status'}}" class="labelLeftPadding" ng-bind="status.itemText"></label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="tabFooter leftSection">
+                      <div class="btn-container">
+                        <button type="button" class="btn btn-default sumt-btn-default resetMargin" translate="RESET_TXT" ng-click="filter.resetFilter()" aria-label="{{ 'RESET_FILTER' | translate }}"></button>
+                        <button class="btn btn-primary" type="button" translate="APPLY" ng-click="filter.applyFilter()"></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div bs-pane="" data-title="{{'REQUISITION_SEARCH' | translate}}" name="search">
+                    <div class="tabContent">
+                      <div class="searchDivPadding">
+                        <label for="recCandidateSearch" translate="REQUISITION_CANDIDATE_NAME"></label>
+                        <input id="recCandidateSearch" type="text" class="form-control" ng-model="filter.candidateSearchString" />
+                      </div>
+                    </div>
+
+                    <div class="tabFooter leftSection">
+                      <div class="btn-container">
+                        <button type="button" class="btn btn-default sumt-btn-default resetMargin" translate="RESET_TXT" ng-click="filter.resetFilter()" aria-label="{{ 'RESET_FILTER' | translate }}"></button>
+                        <button class="btn btn-primary" type="button" translate="REQUISITION_SEARCH" ng-click="filter.nameFilter(filter.candidateSearchString)"></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" >
+      <div class="content no-footer" ng-style="{'padding-left' : filter.showCandidateListFilter ? '330px' : '16px'}">
+        <header id="requisitionWorkspaceHeader">
+          <div id="reqHeader">
+            <local-breadcrumb-navigation></local-breadcrumb-navigation>
+          </div>
+          <div id="agencyRequisitionHeader">
+            <h1 ng-bind="requisitionTitle"></h1>
+            <p translate="AGENCY_REQUISITION_INSTRUCTION"></p>
+          </div>
+        </header>
+        <div class="row">
+          <div id="alert-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 alertPadding"></div>
+        </div>
+        <div bs-tabs id="requisitionWorkspaceTabs" bs-active-pane="tabs.activeTab" ng-model="tabs.activeTab" ng-if="!IsTrackingMode" role="tablist">
+          <div bs-pane="" data-title="{{'REQUISITION_WORKSPACE_DASHBOARD' | translate}}" name="dashboard" role="tab">
+            <div ng-if="showDashboard" ng-include="'./app/modules/requisition/views/agency/agencyRequisition.dashboard.html'"></div>
+          </div>
+          <div bs-pane="" data-title="{{'REQUISITION_WORKSPACE_DETAILS' | translate}}" name="details" role="tab">
+            <div ng-include="'./app/modules/requisition/views/agency/agencyRequisitionDetails.html'" ng-if="enableDetails"></div>
+          </div>
+          <div bs-pane="" data-title="{{'REQUISITION_WORKSPACE_CANDIDATES' | translate}}" name="candidates" role="tab">
+            <div ng-if="showCandidateList" ng-include="'./app/modules/requisition/views/agency/agencyCandidateList.html'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
