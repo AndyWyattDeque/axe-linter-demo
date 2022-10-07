@@ -1,0 +1,490 @@
+<div id="resumesummary">
+    <div class="row">
+        <div class="col-md-8 col-xs-8 col-lg-8 col-sm-8">
+            <h1 id="ResumeSummary" tabindex="-1" translate="ONBOARDING_RESUME_SUMMARY"></h1>
+        </div>
+        <div class="col-md-4 col-xs-4 col-lg-4 col-sm-4">
+            <div class="pull-right">
+                <button type="button" class="btn btn-default sumt-btn-default" ng-click="openResumeFromCandidateSummary()" translate="ONBOARDING_VIEW_RESUME" aria-label="{{ 'ONBOARDING_VIEW_RESUME' | translate }}"></button>
+            </div>
+        </div>
+    </div>
+
+    <!--Candidate Primary Details Section-->
+    <div class="row userInfoSpace">
+        <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+            <div ng-if="enablePositionFitMetric" sumt-keymeasure-chart chart-data="{{userPositionFitScore}}" class="text-center pull-left resumeSummaryCandidateImage" chart-width="70px" chart-height="70px">
+                <div class="miniprofilekeymeasureImageDiv">
+                    <i ng-if="targetEmpImagePath == null" class="fa fa-user fa-3x miniprofilekeymeasureImageNullNoHeight"></i>
+                    <img ng-if="targetEmpImagePath != null" style="height:69px; width:68px;" class="img-circle img-large" ng-src="{{targetEmpImagePath}}" translate translate-attr-alt="CORE_VIEWS_PROFILE_MINIPROFILESLIDEOUT_IMAGE_ALT" />
+                </div>
+            </div>
+            <div ng-if="!enablePositionFitMetric">
+                <div class="miniprofilekeymeasureImageDiv">
+                    <i ng-if="targetEmpImagePath == null" class="fa fa-user fa-3x img-circle img-large miniprofilekeymeasureImageNull"></i>
+                    <img ng-if="targetEmpImagePath != null" style="height:69px; width:69px;" class="img-circle img-medium" ng-src="{{targetEmpImagePath}}" translate translate-attr-alt="CORE_VIEWS_PROFILE_MINIPROFILESLIDEOUT_IMAGE_ALT" />
+                </div>
+            </div>
+            <div style="padding-left:90px;">
+                <table class="userTable userTable-block">
+                    <thead>
+                        <tr>
+                            <th class="padding-bottom-10PX">
+                                <span class="h3 userName" ng-bind="candidateDetails.PersonDetails.FirstName"></span>
+                                <span class="h3 userName" ng-bind="candidateDetails.PersonDetails.LastName"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="padding-bottom-10PX">
+                                <span ng-bind="candidateDetails.JobTitle"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td ng-if="candidateDetails.LinkedinProfileUrl != null" class="fa fa-linkedin-square socialnetwork resumeSummaryLinkedin" ng-click="openAccount('LINKEDIN',candidateDetails.LinkedinProfileUrl)"></td>
+                            <td ng-if="candidateDetails.FacebookUrl != null" class="fa fa-facebook-square socialnetwork" ng-click="openAccount('FACEBOOK',candidateDetails.FacebookUrl)"></td>
+                            <td ng-if="candidateDetails.GoogleplusUrl != null" class="fa fa-google-plus-square socialnetwork resumeSummaryGoogle" ng-click="openAccount('GOOGLEPLUS',candidateDetails.GoogleplusUrl)"></td>
+                            <td ng-if="candidateDetails.TwitterFeed != null" class="fa fa-twitter-square socialnetwork resumeSummaryTwitter" ng-click="openAccount('TWITTER',candidateDetails.TwitterFeed)"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="col-md-8 col-xs-8 col-lg-8 col-sm-8">
+
+            </div>-->
+        </div>
+        <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+            <table class="userTable">
+                <tbody>
+                    <tr ng-if="address.City">
+                        <td>
+                            <i class="fa fa-map-marker padding-right-10PX"></i>
+                            <span ng-bind="address.City"></span>
+                        </td>
+                    </tr>
+                    <tr ng-if="candidateDetails.Email">
+                        <td>
+                            <i class="fa fa-envelope" style="padding-right:5px;"></i>
+                            <a href="mailto:{{::candidateDetails.Email}}" ng-bind="candidateDetails.Email"></a>
+                        </td>
+                    </tr>
+                    <tr ng-if="candidateDetails.WorkPhoneNumber">
+                        <td>
+                            <i class="fa fa-phone" style="padding-right:7px;"></i>
+                            <span ng-bind="candidateDetails.WorkPhoneNumber"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--Currently Requisition is not supporting number of days to Fill. We need to add this back when requisition has Time To Fill Details -- TODO-->
+        <!--<div class="col-md-4">
+          <table class="userTable">
+            <tbody>
+              <tr>
+                <td class="detail text-uppercase"><strong>{{::translationFactory.current.ONBOARDING_TIME_TO_FILL}}</strong></td>
+              </tr>
+              <tr>
+                <td><i class="fa fa-calendar"><span> 20 Days</span></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>-->
+    </div>
+
+    <!--ResumeFit Metric Section-->
+    <div style="display:flex;">
+        <div ng-if="enablePositionFitMetric" class="measure1 fitdonut" ng-class="{'selectedmeasure': 'POSITION_FIT' == selectedMetric}" ng-click="setSelectedMetric('POSITION_FIT')" ng-style="setFitWidth()">
+            <span class="h4 metricName" translate="POSITIONFIT_HEADER_TITLE"></span>
+            <div sumt-keymeasure-chart chart-data="{{userPositionFitScore}}" chart-width="70px" chart-height="72px" class="chart-feed">
+                <div class="metricScoreLabel">{{userPositionFitScore| number:0}}</div><small>%</small>
+            </div>
+        </div>
+        <div ng-if="enableGeoFitTab" class="measure1" ng-class="{'selectedmeasure': 'GEO_FIT' == selectedMetric}" ng-click="setSelectedMetric('GEO_FIT')" ng-style="setFitWidth()">
+            <span class="h4 metricName" translate="ONBOARDING_GEOGRAPHIC_FIT"></span>
+            <div class="textmetric metricValue">
+                <span class="fa-stack">
+                    <i class=" fa fa-circle-thin fa-stack-2x"></i>
+                    <i class="fa fa-map-marker fa-stack-1x"></i>
+                </span>
+                <span class="contentText" style="vertical-align:sub">{{commutes.distance ||'--'}}</span>
+                <span class="h4">{{commutes.carDuration ? commutes.carDuration + '.' : '--'}}<span translate="ONBOARDING_COMMUTE"></span></span>
+            </div>
+        </div>
+        <div ng-if="enableCompFitTab" class="measure1" ng-class="{'selectedmeasure': 'COMPENSATION' == selectedMetric}" ng-click="setSelectedMetric('COMPENSATION')" ng-style="setFitWidth()">
+            <span class="h4 metricName" translate="ONBOARDING_COMPENSATION"></span>
+            <div class="textmetric metricValue">
+                <span class="fa-stack" ng-if="compensation && compensation.length!=0">
+                    <i class=" fa fa-circle-thin fa-stack-2x"></i>
+                    <i class="fa fa-stack-1x"></i>
+                    <span class="contentText" ng-bind="compensation.Currency" style="font-size:inherit;"></span>
+                </span>
+                <span class="contentText" style="vertical-align:middle">{{compensation.Salary || '--'}}</span>
+            </div>
+        </div>
+    </div>
+    <!--Position fit tab-->
+    <div class="row" ng-show="positionFitMetric">
+        <div>
+            <div class="row">
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" style="padding-left:30px;">
+                    <div ng-if="positionFitDetails.MatchDetail.length>0">
+                        <h2 class="text-uppercase" translate="ONBOARDING_EXPERIENCE_MATCHES"></h2>
+                        <table ng-cloak class="table table-borderless">
+                            <tr ng-repeat="match in positionFitDetails.MatchDetail">
+                                <td style="padding-left:0px; padding-bottom:0px;">
+                                    <i class="fa fa-check-circle resumeSummaryMatch"></i>
+                                    <strong class="padding-right-10PX" style="padding-left:5px;">{{::match.ObjectValue}}%</strong>
+                                    <span ng-switch="match.CriteriaName">
+                                        <span ng-switch-when="Career Level" translate="ONBOARDING_CAREERLEVEL"></span>
+                                        <span ng-switch-when="Years of Experience" translate="RESUME_YEARS_OF_EXPERIENCE_TEXT"></span>
+                                        <span ng-switch-when="Willing to Travel" translate="ONBOARDING_TRAVELPREFERENCE_WIILINGTOTRAVEL"></span>
+                                        <span ng-switch-when="Education Level" translate="ONBOARDING_EDUCATION_LEVEL"></span>  
+                                        <span ng-switch-when="Resume Fit" translate="ONBOARDING_RESUME_FIT"></span>                                                                                               
+                                        <span ng-switch-default>{{::match.ObjectName == null ? match.CriteriaName : match.ObjectName}}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" style="padding-right:30px;">
+                    <div ng-if="positionFitDetails.KeySkills.length>0">
+                        <h2 class="text-uppercase" translate="ONBOARDING_TOP_KEY_SKILLS" style="padding-bottom:19px;"></h2>
+                        <table>
+                            <tr ng-repeat="skill in positionFitDetails.KeySkills">
+                                <td class="skillratingtd" ng-style="{'background-color':setSkillColor(skill.ObjectValue)}">{{skill.ObjectValue}}</td>
+                                <td class="skillnametd">{{::skill.ObjectName}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" style="padding-left:30px;">
+                    <div ng-if="positionFitDetails.GapDetail.length>0">
+                        <h2 class="text-uppercase" translate="ONBOARDING_EXPERIENCE_GAPS"></h2>
+                        <table ng-cloak class="table table-borderless">
+                            <tr ng-repeat="gap in positionFitDetails.GapDetail">
+                                <td style="padding-left:0px; padding-bottom:0px;">
+                                    <i class="fa fa-exclamation-circle resumeSummaryNoMatch"></i>
+                                    <strong class="padding-right-10PX" style="padding-left:5px;">{{::gap.ObjectValue}}%</strong>
+                                    <span ng-switch="gap.CriteriaName">
+                                        <span ng-switch-when="Career Level" translate="ONBOARDING_CAREERLEVEL"></span>
+                                        <span ng-switch-when="Years of Experience" translate="RESUME_YEARS_OF_EXPERIENCE_TEXT"></span>
+                                        <span ng-switch-when="Willing to Travel" translate="ONBOARDING_TRAVELPREFERENCE_WIILINGTOTRAVEL"></span>
+                                        <span ng-switch-when="Education Level" translate="ONBOARDING_EDUCATION_LEVEL"></span>
+                                        <span ng-switch-when="Resume Fit" translate="ONBOARDING_RESUME_FIT"></span>
+                                        <span ng-switch-default>{{::gap.ObjectName == null ? gap.CriteriaName : gap.ObjectName}}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-if="isLMenabled">
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12 ResumeSummaryLMDiv">
+                <div recommandations id="ResumeSummaryLM"></div>
+            </div>
+        </div>
+    </div>
+    <!--Geo fit tab-->
+    <div ng-show="geoFitMetric">
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12 padding-top-20PX padding-left-0PX padding-right-0PX">
+            <div ng-show="messages.failed.active" class="alert alert-warning alert-dismissible" role="alert">
+                <button ng-click="messages.failed.active = false" type="button" class="close" data-dismiss="alert" translate-attr-aria-label="TRANSLATION_CLOSE"><span aria-hidden="true">&times;</span></button>
+                <strong>{{messages.failed.message}}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-4 col-lg-4 col-sm-4">
+                <h3 class="text-uppercase bold-view" translate="ONBOARDING_PERSON_HOME_ADDRESS"></h3>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.PersonAddress1}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.PersonAddress2}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.PersonCity}}</div></div>
+                <div class="row" ng-if="geofitdetails.PersonStateName!=undefined && geofitdetails.PersonStateName!='-1'"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.PersonStateName}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.PersonCountryName}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.PersonZipCode}}</div></div>
+                <br /><br />
+                <h3 class="text-uppercase bold-view" translate="ONBOARDING_OFFICE_LOCATION"></h3>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.WorkAddressLine1}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.WorkAddressLine2}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.WorkCity}}</div></div>
+                <div class="row" ng-if="geofitdetails.WorkStateName!=undefined && geofitdetails.WorkStateName!='-1'"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.WorkStateName}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.WorkCountryName}}</div></div>
+                <div class="row"><div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">{{geofitdetails.WorkZipCode}}</div></div>
+            </div>
+            <div class="col-md-8 col-xs-8 col-lg-8 col-sm-8">
+                <br />
+                <div id="map"></div>
+            </div>
+        </div>
+        <div class="row" ng-show="showRouting">
+            <div class="col-md-4 col-xs-4 col-lg-4 col-sm-4">
+                <h3 class="text-uppercase bold-view margin-bottom-0PX" translate="ONBOARDING_COMMUTE"></h3>
+                <div class="row" ng-if="commutes.carDuration!=undefined">
+                    <div class="col-md-1 col-xs-1 col-lg-1 col-sm-1">
+                        <h3><i class="fa fa-car"></i></h3>
+                    </div>
+                    <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9" style="padding-left:14px;">
+                        <h3><a role="button" style='text-decoration:none;' ng-click="changeRoute('DRIVING')">{{commutes.carDuration || '--'}}</a></h3>
+                    </div>
+                </div>
+                <div class="row" ng-if="commutes.busDuration!=undefined">
+                    <div class="col-md-1 col-xs-1 col-lg-1 col-sm-1">
+                        <h3><i class="fa fa-bus"></i></h3>
+                    </div>
+                    <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9" style="padding-left:14px;">
+                        <h3><a role="button" style='text-decoration:none;' ng-click="changeRoute('TRANSIT')">{{commutes.busDuration || '--'}}</a></h3>
+                    </div>
+                </div>
+                <div class="row" ng-if="commutes.bicycleDuration!=undefined">
+                    <div class="col-md-1 col-xs-1 col-lg-1 col-sm-1">
+                        <h3><i class="fa fa-bicycle"></i></h3>
+                    </div>
+                    <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9" style="padding-left:14px;">
+                        <h3><a role="button" style='text-decoration:none;' ng-click="changeRoute('BICYCLING')">{{commutes.bicycleDuration || '--'}}</a></h3>
+                    </div>
+                </div>
+                <div class="row" ng-if="commutes.walkDuration!=undefined">
+                    <div class="col-md-1 col-xs-1 col-lg-1 col-sm-1">
+                        <h3><i class="fa fa-street-view"></i></h3>
+                    </div>
+                    <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9">
+                        <h3><a role="button" style='text-decoration:none;' ng-click="changeRoute('WALKING')">{{commutes.walkDuration || '--'}}</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8" ng-if="commutes.CommuteType!=undefined">
+                <h2 class="text-uppercase" translate="ONBOARDING_GEO_DIRECTIONS"></h2>
+                <br />
+                <strong>{{commutes.CommuteType}}</strong>
+                <br />
+                <div id="right-panel">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--compensation tab-->
+    <div ng-show="compMetric">
+        <div ng-show="compensation && compensation.length!=0">
+            <div class="row">
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+                    <h2 class="text-uppercase" translate="ONBOARDING_PERSON_SALARY_RANGE"></h2> <br />
+                    <h3 ng-bind="compensation.PersonJobName" style="margin-top:20px;"></h3><br />
+                    <div>
+                        <div ng-style="StyleValue && {'float':positionValue} || !StyleValue && {'padding-left':equityPadding}">
+                        <span class="bold-view">{{compensation.Currency}}{{compensation.Salary}}</span>
+                    </div>
+                        <div ng-style="{'padding-left':paddingValue}">
+                            <h3 class="margin-top-0PX margin-bottom-0PX"><i class="fa fa-caret-down"></i></h3>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{compensation.PersonSalPercentage}}" aria-valuemin="{{compensation.PositionMinSalary}}" aria-valuemax="{{compensation.PositionMaxSalary}}" ng-style="{'width':widthValue}">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="pull-left" translate="ONBOARDING_COMPENSATION_SALARY_LOW"></span>
+                        <span class="pull-right" translate="ONBOARDING_COMPENSATION_SALARY_HIGH"></span>   <br />
+                        <span class="pull-left">{{compensation.Currency}}{{compensation.PositionMinSalary}}</span>
+                        <span class="pull-right">{{compensation.Currency}}{{compensation.PositionMaxSalary}}</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+                    <h2 class="text-uppercase" translate="ONBOARDING_PERSON_INDUSTRY_COMPARABLES"></h2><br />
+                    <h3 ng-bind="compensation.PersonJobName" style="margin-top:20px;"></h3><br />
+                    <div>
+                        <div ng-style="StyleValue && {'float':positionValue} || !StyleValue && {'padding-left':equityPadding}">
+                        <span class="bold-view">{{compensation.Currency}}{{compensation.Salary}}</span>
+                    </div>
+                        <div  ng-style="{'padding-left':paddingValue}">
+                            <h3 class="margin-top-0PX margin-bottom-0PX"><i class="fa fa-caret-down"></i></h3>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{compensation.PersonSalPercentage}}" aria-valuemin="{{compensation.PositionMinSalary}}" aria-valuemax="{{compensation.MarketPosMaxSalary}}" ng-style="{'width':widthValue}">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="pull-left" translate="ONBOARDING_COMPENSATION_SALARY_LOW"></span>
+                        <span class="pull-right" translate="ONBOARDING_COMPENSATION_SALARY_HIGH"></span><br />
+                        <span class="pull-left">{{compensation.Currency}}{{compensation.PositionMinSalary}}</span>
+                        <span class="pull-right">{{compensation.Currency}}{{compensation.PositionMaxSalary}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- commenting this out, when we build similar positions, we will add this back-->
+            <!--<div class="row">
+              <div class="col-md-6"></div>
+              <div class="col-md-4">
+                <h3 class="bold-view" ng-bind="::translationFactory.current.ONBOARDING_SIMILAR_POSITIONS"></h3>
+                <table>
+                  <tr ng-repeat="position in SimilarPositions">
+                    <td ng-bind="position.Position">
+                    </td>
+                    <td>
+                      {{position.Currency}}{{position.LowSalary}} - {{position.Currency}}{{position.HighSalary}}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-2"></div>
+            </div>-->
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12 padding-top-15PX">
+                    <h3 class="bold-view text-uppercase" style="margin-bottom:20px;" translate="ONBOARDING_INTERNAL_EQUITY"></h3>
+                </div>
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6 padding-left-0PX">
+                    <table style="width:40%">
+                        <tr ng-repeat="user in compensation.InternalEquities">
+                            <td style="width:10%" class="padding-bottom-20PX">
+                                <div sumt-keymeasure-chart chart-data="{{user.UserMatchScore}}" chart-height="71px" chart-width="70px" class="resumeSummaryImage" data-title="{{user.UserMatchScore}}">
+                                    <div>
+                                        <i ng-if="user.ImagePath = '' || user.ImagePath = undefined" class="fa fa-user fa-3x pull-right sumt-keymeasure-chart-no-image"></i>
+                                        <img style="height:68px; width:68px;" class="img-circle img-medium" ng-if="user.ImagePath != '' && user.ImagePath != undefined" ng-src="{{user.ImagePath}}"
+                                     translate translate-attr-alt="CORE_VIEWS_PROFILE_MINIPROFILESLIDEOUT_IMAGE_ALT" />
+                              </div>
+                                </div>
+                            </td>
+                            <td style="width:35%" class="padding-bottom-20PX">
+                                <strong style="color:#337ab7;" ng-bind="user.PersonFullName"></strong>
+                                <p style="padding-top:7px;"> {{user.PersonJobName}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+                    <table style="width:100%">
+                        <tr ng-repeat="user in compensation.InternalEquities">
+                            <td>
+                                <div ng-style="{'padding-left': user.EmployeeSalaryPercentage -1 + '%'}">
+                                    <span class="bold-view">{{user.Currency}}{{user.Salary}}</span>
+                                    <h3 class="margin-bottom-0PX margin-top-0PX"><i class="fa fa-caret-down"></i></h3>
+                                </div>
+                                <div class="progress margin-bottom-0PX">
+                                    <div class="bar-step" ng-style="{'padding-left': user.PersonSalaryPercentage - 1 + '%'}">
+                                        <div class="label-line"></div>
+                                    </div>
+                                    <div class="progress-bar progress-bar-success" aria-valuemin="{{user.PositionMinSalary}}" aria-valuemax="{{user.PositionMaxSalary}}" ng-style="{'width': user.SuccessPercentage + '%'}">
+                                    </div>
+                                    <div class="progress-bar progress-bar-warning" ng-style="{'width': user.WarningPercentage + '%'}" aria-valuemin="{{user.PositionMinSalary}}" aria-valuemax="{{user.PositionMaxSalary}}">
+                                    </div>
+                                </div>
+                                <div ng-style="{'padding-left': user.PersonSalaryPercentage - 1 + '%'}">
+                                    <h3 class="margin-bottom-0PX margin-top-0PX"><i class="fa fa-caret-up"></i></h3>
+                                    {{compensation.Currency}}{{compensation.Salary}}
+                                </div>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- <div class="row" ng-repeat="user in compensation.InternalEquities">
+             <div class="col-md-8">-->
+
+        </div>
+        <div ng-show="compensation.length ==0" class="padding-top-20PX">
+            <span translate="NAVIGATIONS_NODATA_AVAILABLE"></span>
+        </div>
+    </div>
+    <!--References tab-->
+    <div ng-show="refMetric">
+        <div class="panel panel-default">
+            <br />
+            <table ng-table="tableParams" class="table">
+                <tr ng-repeat="ref in referenceCandidatesData">
+                    <td data-title="'Name'" sortable="'name'">
+                        {{::ref.ReferenceeName}}
+                    </td>
+                    <td data-title="'Position'" sortable="'position'">
+                        {{::ref.ReferenceePosition}}
+                    </td>
+                    <td data-title="'Location'" sortable="'location'">
+                        {{::ref.ReferenceeLocation}}
+                    </td>
+                    <td data-title="'Contact Info'" sortable="'contactInfo'">
+                        {{::ref.ReferenceeContactInfo}}
+                    </td>
+                    <td data-title="'Relationship'" sortable="'relationship'">
+                        <span translate="ONBOARDING_WORKED_AS"></span> &nbsp;{{::ref.referenceeposition}}&nbsp;<span translate="ONBOARDING_FOR"></span> &nbsp;{{::ref.referenceecompanyname}}&nbsp;<span translate="ONBOARDING_IN"></span> &nbsp;{{::ref.referenceelocation}}&nbsp;<span translate="ONBOARDING_BETWEEN"></span>&nbsp;{{::ref.personstartyear}}&nbsp;<span translate="ONBOARDING_AND"></span>&nbsp;{{::ref.personendyear}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!--Feedback tab-->
+    <div ng-show="feedbackMetric" style="padding-top:160px;">
+        <div class="sumt-toolbar clearfix">
+            <a class="btn" aria-haspopup="true" aria-expanded="false" ng-click="addFeedback()">
+                <h4>
+                    <i class="fa fa-plus"></i>
+                    <span translate="ONBOARDING_ADD_FEEDBACK"></span></h4>
+            </a>
+            <button class="btn">
+                <h4><i class="fa fa-refresh"></i><span translate="ONBOARDING_REFRESH"></span></h4>
+            </button>
+            <div class="pull-right">
+                <h4 class="feedbackMetricViewH4"><span translate="ONBOARDING_VIEW"></span></h4>
+                <select class="form-control feedbackMetricViewSelect">
+                    <option>All (26)</option>
+                </select>
+            </div>
+        </div>
+        <div class="cd-timeline cd-container goal-timeline-container" ng-class="{'cd-timeline-stagger': stagger}">
+            <div id="workadd" class="cd-timeline-block" ng-repeat="feedback in feedbackdata">
+                <div class="cd-timeline-img cd-picture" ng-class="{'cd-timeline-img-stagger': stagger}">
+                    <i class="{{node.icon ? node.icon:'fa fa-comments'}}"></i>
+                </div>
+                <div class="cd-timeline-content row" ng-class="{'cd-timeline-content-stagger': stagger, 'cd-timeline-selected': node.highlight}">
+                    <div style="padding-bottom:10px;">
+                        <strong>{{feedback.ReviewDate | date:'dd/MM/yyyy'}}</strong>
+                    </div>
+                    <div sumt-keymeasure-chart chart-data="75" chart-height="60px" chart-width="60px" class="col-xs-1 sumt-keymeasure-chart-only-padding-right">
+                        <i ng-if="imagePath = '' || imagePath = undefined" class="fa fa-3x fa-user pull-left sumt-keymeasure-chart-no-image"></i>
+                        <img class="img-circle img-medium pull-left" ng-if="imagePath != '' && imagePath != undefined" ng-src="{{imagePath}}"
+                             translate translate-attr-alt="CORE_VIEWS_PROFILE_MINIPROFILESLIDEOUT_IMAGE_ALT" />
+                    </div>
+                    <div class="col-xs-11">
+                        <div class="row">
+                            <div class="col-xs-9" style="padding-bottom:10px;">
+                                <strong style="color:#337ab7;">{{feedback.ReviewerName}} </strong><span translate="ONBOARDING_PROVIDED_FEEDBACK"></span></div>
+                            <div class="col-xs-4" style="padding-bottom:10px;">
+                                <strong class="bestFit reviewRating"></strong>
+                            </div>
+                            <div class="col-xs-9" style="padding-bottom:10px;">
+                                <strong ng-show="feedback.ReviewType == 'InterviewAssessment'">Interview Feedback</strong>
+                                <strong ng-show="feedback.ReviewType == 'BackgroundCheck'">Background Check Feedback</strong>
+                                <strong ng-show="feedback.ReviewType == 'Note'">Note</strong>
+                                <strong ng-show="feedback.ReviewType == 'ReferenceCheck'">Reference Check Feedback</strong>
+                                <strong ng-show="feedback.ReviewType == 'Assessment'">Assessment Feedback</strong>
+                            </div>
+                            <div class="col-xs-12">
+                                {{feedback.Review}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="workadd" class="cd-timeline-block">
+                <div class="cd-timeline-img cd-picture" ng-class="{'cd-timeline-img-stagger': stagger}">
+                    <i class="{{node.icon ? node.icon:'fa fa-thumb-tack'}}"></i>
+                </div>
+                <div class="cd-timeline-content" ng-class="{'cd-timeline-content-stagger': stagger, 'cd-timeline-selected': node.highlight}">
+
+                    <div class="btn" style="float: right;" ng-click="editFeedback()">
+                        <i class="{{node.edit==undefined ? 'fa fa-pencil':''}}" style="float: right;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
