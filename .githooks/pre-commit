@@ -15,12 +15,12 @@ echo ""
 echo "Axe Linter Starting $(date)"
  
 # Setup variables for Axe Linter Server
-export AXE_LINTER_SERVER_URL=https://adp-axelinter.dequecloud.com
-export AXE_LINTER_SERVER_PORT=443
+export AXE_LINTER_SERVER_URL=http://redhat7axelinter.labdeque.com
+export AXE_LINTER_SERVER_PORT=3000
 StatusCode=0
 TempCode=0 
 # Configure verbose output.
-VerboseOutput="false"
+VerboseOutput="true"
 # Configure outfile: output in Generic Issue Import Format for in execution directory.
 OutFile="axe-linter-report.json"
  
