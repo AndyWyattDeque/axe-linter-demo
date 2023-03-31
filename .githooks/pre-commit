@@ -15,8 +15,8 @@ echo ""
 echo "Axe Linter Starting $(date)"
  
 # Setup variables for Axe Linter Server
-export AXE_LINTER_SERVER_URL=http://demo-jenkins-axelinter.labdeque.com
-export AXE_LINTER_SERVER_PORT=3000
+export AXE_LINTER_SERVER_URL=https://adp-axelinter.dequecloud.com
+export AXE_LINTER_SERVER_PORT=443
 StatusCode=0
 TempCode=0 
 # Configure verbose output.
