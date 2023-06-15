@@ -1,0 +1,6 @@
+global-components:
+  mybutton: button
+  myImg: 
+    element: img
+    attributes: 
+      - label: alt 

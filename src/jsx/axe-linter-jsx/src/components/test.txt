@@ -1,0 +1,155 @@
+function AxeMonitorSubscription(fields) {
+ 
+  var named_values = fields.namedValues 
+  var accountspayable ='david.musser@deque.com'
+
+  // FIELDS ORDER:
+  //Field 0 12/20/2022 11:25:10
+  //Field 1 Name
+  //Field 2 Email
+  //Field 3 Phone
+  //Field 4 Managers Name
+  //Field 5 Managers Email
+  //Field 6 Yes
+  //Field 7 Adobe Acrobat, Assistive Labs (Jaws testing for Mac), Lucid Chart, Microsoft Office, Microsoft Power BI, Microsoft Power BI Pro, Parallels, Webex, Zoom
+  //Field 8 Software Name 
+  //Field 9 Software Description
+  //Field 10 Software Cost
+  //Field 11 Software Vendor Website
+  //Field 12 Software Need Duration
+  //Field 13 Accessibility Review Complete
+  //Field 14 Security Review Complete
+  //Field 15 Additional Team Members Required
+  //Field 16 Additional Team Members
+  //Field 17 Notes
+
+
+  var url = "https://dequesrc.atlassian.net/rest/api/latest/issue";
+  var desc =  "New Software Request."
+  desc += "\nEmployee Name: "+fields.values[1]
+  desc += "\nEmail Address: "+fields.values[2]
+  desc += "\nPhone: "+fields.values[3]
+  desc += "\nManager Name: "+fields.values[4]
+  desc += "\nManager Email: "+fields.values[5]
+  desc += "\nDid Manager already approve: "+fields.values[6]
+  desc += "\nCorporate Software: "+fields.values[7]
+  desc += "\nOther Software Name: "+fields.values[8]
+  desc += "\nOther Software Description: "+fields.values[9]
+  desc += "\nOther Software Cost: "+fields.values[10]
+  desc += "\nOther Software Vendor WebSite: "+fields.values[11]
+  desc += "\nOther Software Need Duration: "+fields.values[12]
+  desc += "\nOther Software Accessibility Review Completed: "+fields.values[13]
+  desc += "\nOther Software Security Review Completed: "+fields.values[14]
+  desc += "\nAdditional Team Members: "+fields.values[15]
+  desc += "\nTeam Member Names: "+fields.values[16]
+  desc += "\nNotes: "+fields.values[17]
+  
+  desc += "\nNote: Any software over $XYZ per month $XYZ per year requires executive approval even if corporately licensed."
+
+ 
+  priority = "Moderate"
+
+  // The POST data for the JIRA API call
+  var data = {
+    "fields": {
+      "project":{
+        "key": "IHD"
+      },
+      "summary": fields.values[1]+" | Software Request",
+      "description": desc,
+      "priority": {"name": priority},
+      "issuetype":{
+        "name": "Task"
+      }
+    }
+  };
+//
+// Turn all the post data into a JSON string to be send to the API
+//
+  var payload = JSON.stringify(data);
+  var headers = {
+    "content-type": "application/json",
+    "Accept": "application/json",
+    "authorization": "Basic ZGF2aWQubXVzc2VyQGRlcXVlLmNvbTo3VWdzTjRza2NZTUlPbzNEeG9hTUU5QjE="
+  };
+// A final few options to complete the JSON string
+  var options = {
+    "content-type": "application/json",
+    "method": "POST",
+    "headers": headers,
+    "payload": payload
+  };
+//
+// Make the HTTP call to the JIRA API
+//
+  var response = UrlFetchApp.fetch(url, options);
+  Logger.log(response.getContentText());
+//
+// Parse the JSON response to use the Issue Key returned by the API in the email
+//
+  var dataAll = JSON.parse(response.getContentText());
+  var issueKey = dataAll.key
+  Logger.log(dataAll)
+//
+
+//
+// Assign variables for the email reposnse
+//
+  var emailSubject = "Your Software request has been created";
+  var emailBody = "Your Software request has been received and is logged under ticket # " + issueKey + ". This can be accessed via:" + "\n\n" +
+      "https://dequesrc.atlassian.net/browse/"+ issueKey + "\n\n"
+      + desc
+       
+//
+// Send an email to the requestor
+//
+  MailApp.sendEmail(fields.values[2], emailSubject, emailBody, {
+    name: ''
+  })
+//console.log (fields.values[6])
+if (fields.values[6] != "No")
+  {
+var emailSubject = fields.values[1] + " Software request has been created";
+var emailBody = fields.values[1] + " has requested Software stating you have already approved. The ticket is logged under # " + issueKey + ". This can be accessed via:" + "\n\n" + "https://dequesrc.atlassian.net/browse/"+ issueKey + "\n\n" + desc
+
+MailApp.sendEmail(fields.values[5], emailSubject, emailBody, {
+    name: ''
+  })
+
+// AP
+var emailSubject = fields.values[1] + " Test Software request has been created";
+var emailBody = fields.values[1] + " TEST IGNORE - has requested Software stating that " + fields.values[5] + " has provided management approval They will receive a copy of this request. The ticket logged under ticket # " + issueKey + ". This can be accessed via:" + "\n\n" + "https://dequesrc.atlassian.net/browse/"+ issueKey + "\n\n" + desc
+
+MailApp.sendEmail(accountspayable, emailSubject, emailBody, {
+    name: ''
+  })
+
+  }
+  else
+  {
+var emailSubject = fields.values[1] + " Software request has been created";
+var emailBody = fields.values[1] + " has requested Software you may need to approve. If so IHD may reach out. The ticket logged under ticket # " + issueKey + ". This can be accessed via:" + "\n\n" + "https://dequesrc.atlassian.net/browse/"+ issueKey + "\n\n" + desc
+
+MailApp.sendEmail(fields.values[5], emailSubject, emailBody, {
+    name: ''
+  })
+
+// AP
+var emailSubject = fields.values[1] + " Test Software request has been created";
+var emailBody = fields.values[1] + " TEST IGNORE - has requested Software that " + fields.values[5] + "needs to provide management approval. The ticket logged under ticket # " + issueKey + ". This can be accessed via:" + "\n\n" + "https://dequesrc.atlassian.net/browse/"+ issueKey + "\n\n" + desc
+
+MailApp.sendEmail(accountspayable, emailSubject, emailBody, {
+    name: ''
+  })
+
+
+  }
+
+
+//console.log(desc)
+  //GmailApp.sendEmail(recipient,"New Response Submitted","Body of the response")
+   }
+
+
+
+ 
