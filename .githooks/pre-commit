@@ -1,6 +1,6 @@
 #!/bin/bash
 # axe-linter pre-commit
-# axe-linter-connector-win, -linux, -mac need to be installed and in path. Update line 32 with name of connector. 
+# axe-linter-connector-win, -linux, -mac need to be installed and in path. Update line 32 with name of connector.
 # This script will setup the environment variables needed for the axe-linter-connector
 # This script requires that the pre-commit hooks directory be set to .githooks
 # git config --list to display the core.hooksPath variable
@@ -11,56 +11,51 @@
 ## 0 - No Accessibility Defects
 ## 1 - Axe Linter Detected Accessibility Defects
 ## 2 - Execution problem, or Axe-Linter Server unavailable.
-echo "" 
+echo ""
 echo "Axe Linter Starting $(date)"
- 
+
 # Setup variables for Axe Linter Server
-export AXE_LINTER_SERVER_URL=http://redhat7axelinter.labdeque.com
-export AXE_LINTER_SERVER_PORT=3000
+export AXE_LINTER_SERVER_URL=https://qalinter.labdeque.com
+export AXE_LINTER_SERVER_PORT=443
 StatusCode=0
-TempCode=0 
+TempCode=0
 # Configure verbose output.
 VerboseOutput="true"
 # Configure outfile: output in Generic Issue Import Format for in execution directory.
 OutFile="axe-linter-report.json"
- 
+
 for i in $(git status --porcelain | sed s/^...//); do
    TempStatus=0
-shopt -s nocasematch;
-        if [[ $i == *.html ]] || [[ $i == *.js ]] || [[ $i == *.jsx ]]|| [[ $i == *.ts ]]|| [[ $i == *.tsx ]]|| [[ $i == *.vue ]]|| [[ $i == *.htm ]]|| [[ $i == *.md ]]|| [[ $i == *.markdown ]];
-#if [[ $i == *.html ]];
-        then
-           if $VerboseOutput; then
-        echo "Accessibility check: file: $i"
-            fi
-        # execute axe-linter connector - Update with connector name
-        axe-linter-connector-win.exe -s $i -d . -u $AXE_LINTER_SERVER_URL -p $AXE_LINTER_SERVER_PORT
- 
-        if [ ! -f "$OutFile" ];
-           then
-             echo "$OutFile Does Not Exit"
-             exit 2
- 
-           elif cat "$OutFile" | grep -q "BUG"; then
-              if $VerboseOutput; then
-              cat $OutFile
-              fi
-	      echo ""
-              echo "** Axe Linter Accessibility Issues Detected: $i"
-              TempCode=1
-           else
-             echo "- $i is Axe Clean"
-        fi
-           if (($TempCode !=0))
-           then
-            StatusCode=1
-          fi
-        rm $OutFile
-        fi
+   shopt -s nocasematch
+   if [[ $i == *.html ]] || [[ $i == *.js ]] || [[ $i == *.jsx ]] || [[ $i == *.ts ]] || [[ $i == *.tsx ]] || [[ $i == *.vue ]] || [[ $i == *.htm ]] || [[ $i == *.md ]] || [[ $i == *.markdown ]]; then #if [[ $i == *.html ]];
+      if $VerboseOutput; then
+         echo "Accessibility check: file: $i"
+      fi
+      # execute axe-linter connector - Update with connector name
+      axe-linter-connector-win.exe -s $i -d . -u $AXE_LINTER_SERVER_URL -p $AXE_LINTER_SERVER_PORT
+
+      if [ ! -f "$OutFile" ]; then
+         echo "$OutFile Does Not Exit"
+         exit 2
+
+      elif cat "$OutFile" | grep -q "BUG"; then
+         if $VerboseOutput; then
+            cat $OutFile
+         fi
+         echo ""
+         echo "** Axe Linter Accessibility Issues Detected: $i"
+         TempCode=1
+      else
+         echo "- $i is Axe Clean"
+      fi
+      if (($TempCode != 0)); then
+         StatusCode=1
+      fi
+      rm $OutFile
+   fi
 done
- 
-if (($StatusCode !=0))
-        then
-        echo "** Commit Failed due to Accessibility Issues **"
-        fi
+
+if (($StatusCode != 0)); then
+   echo "** Commit Failed due to Accessibility Issues **"
+fi
 exit $StatusCode
